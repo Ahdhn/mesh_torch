@@ -1,0 +1,249 @@
+<html>
+<body>
+
+
+<!-- Load require.js. Delete this if your page already loads require.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "7902f7d94ce0406f8aabce1b03290aeb": {
+      "model_name": "RendererModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "_antialias": true,
+        "_dom_classes": [],
+        "_height": 600,
+        "_width": 600,
+        "camera": "IPY_MODEL_b4b84d442a664f5bbebfe74f4175178d",
+        "clippingPlanes": [],
+        "controls": [
+          "IPY_MODEL_6e77b238221d44c08b700b49fd9c5441"
+        ],
+        "layout": "IPY_MODEL_cb9ed1b58eed448c81ccbfcd0a2a2fe7",
+        "scene": "IPY_MODEL_7807c55d524b4271a53c7df589f6b706",
+        "shadowMap": "IPY_MODEL_8fb9ace4cd534779946b2376d690adf5"
+      }
+    },
+    "b4b84d442a664f5bbebfe74f4175178d": {
+      "model_name": "PerspectiveCameraModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "children": [
+          "IPY_MODEL_4d844c803a474bd699e364705a34d055"
+        ],
+        "fov": 30.0,
+        "position": [
+          0.0,
+          0.0,
+          2.598076211353316
+        ]
+      }
+    },
+    "4d844c803a474bd699e364705a34d055": {
+      "model_name": "DirectionalLightModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "children": [],
+        "color": "white",
+        "intensity": 0.6,
+        "position": [
+          0.0,
+          0.0,
+          2.598076211353316
+        ],
+        "shadow": "uninitialized",
+        "target": "uninitialized"
+      }
+    },
+    "6e77b238221d44c08b700b49fd9c5441": {
+      "model_name": "OrbitControlsModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "controlling": "IPY_MODEL_b4b84d442a664f5bbebfe74f4175178d",
+        "maxAzimuthAngle": "inf",
+        "maxDistance": "inf",
+        "maxZoom": "inf",
+        "minAzimuthAngle": "-inf"
+      }
+    },
+    "cb9ed1b58eed448c81ccbfcd0a2a2fe7": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "2.0.0",
+      "state": {}
+    },
+    "7807c55d524b4271a53c7df589f6b706": {
+      "model_name": "SceneModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "children": [
+          "IPY_MODEL_b4b84d442a664f5bbebfe74f4175178d",
+          "IPY_MODEL_c831d0e4bf704b37901f865f4b9f4dc0",
+          "IPY_MODEL_e514579b3a5f444ea3593460576ba86e"
+        ],
+        "fog": null,
+        "overrideMaterial": null
+      }
+    },
+    "c831d0e4bf704b37901f865f4b9f4dc0": {
+      "model_name": "AmbientLightModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "children": [],
+        "intensity": 0.5
+      }
+    },
+    "e514579b3a5f444ea3593460576ba86e": {
+      "model_name": "MeshModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "children": [],
+        "geometry": "IPY_MODEL_168623ca636440c0b43a0e60c29fce25",
+        "material": "IPY_MODEL_0e95813b56a2408a884d333266c3c8a9",
+        "morphTargetInfluences": []
+      }
+    },
+    "168623ca636440c0b43a0e60c29fce25": {
+      "model_name": "BufferGeometryModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "_ref_geometry": null,
+        "attributes": {
+          "color": "IPY_MODEL_a770986131e24a5f82ad1d7d6f48d973",
+          "index": "IPY_MODEL_a7a438c0520d40b0821fc8736c4a0a2a",
+          "position": "IPY_MODEL_209cc25ebbfa468998335bc7b8cdea00"
+        },
+        "index": null,
+        "morphAttributes": {},
+        "userData": {}
+      }
+    },
+    "a770986131e24a5f82ad1d7d6f48d973": {
+      "model_name": "BufferAttributeModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "array": {
+          "shape": [
+            26,
+            3
+          ],
+          "dtype": "float32"
+        },
+        "normalized": true
+      },
+      "buffers": [
+        {
+          "encoding": "base64",
+          "path": [
+            "array",
+            "buffer"
+          ],
+          "data": "AACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAAAACAP3e+Xz8AAAAA"
+        }
+      ]
+    },
+    "a7a438c0520d40b0821fc8736c4a0a2a": {
+      "model_name": "BufferAttributeModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "array": {
+          "shape": [
+            144
+          ],
+          "dtype": "uint32"
+        }
+      },
+      "buffers": [
+        {
+          "encoding": "base64",
+          "path": [
+            "array",
+            "buffer"
+          ],
+          "data": "AAAAAAgAAAAKAAAACAAAAAEAAAAJAAAACQAAAAIAAAAKAAAACAAAAAkAAAAKAAAAAAAAAAoAAAAMAAAACgAAAAIAAAALAAAACwAAAAMAAAAMAAAACgAAAAsAAAAMAAAAAQAAAA0AAAAJAAAADQAAAAUAAAAOAAAADgAAAAIAAAAJAAAADQAAAA4AAAAJAAAAAgAAAA4AAAAQAAAADgAAAAUAAAAPAAAADwAAAAYAAAAQAAAADgAAAA8AAAAQAAAAAgAAABEAAAALAAAAEQAAAAcAAAASAAAAEgAAAAMAAAALAAAAEQAAABIAAAALAAAAAgAAABAAAAARAAAAEAAAAAYAAAATAAAAEwAAAAcAAAARAAAAEAAAABMAAAARAAAAAAAAAAwAAAAUAAAADAAAAAMAAAASAAAAEgAAAAcAAAAUAAAADAAAABIAAAAUAAAAAAAAABQAAAAWAAAAFAAAAAcAAAAVAAAAFQAAAAQAAAAWAAAAFAAAABUAAAAWAAAAAAAAABcAAAAIAAAAFwAAAAUAAAANAAAADQAAAAEAAAAIAAAAFwAAAA0AAAAIAAAAAAAAABYAAAAXAAAAFgAAAAQAAAAYAAAAGAAAAAUAAAAXAAAAFgAAABgAAAAXAAAABQAAABgAAAAZAAAAGAAAAAQAAAAVAAAAFQAAAAcAAAAZAAAAGAAAABUAAAAZAAAABQAAABkAAAAPAAAAGQAAAAcAAAATAAAAEwAAAAYAAAAPAAAAGQAAABMAAAAPAAAA"
+        }
+      ]
+    },
+    "209cc25ebbfa468998335bc7b8cdea00": {
+      "model_name": "BufferAttributeModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "array": {
+          "shape": [
+            26,
+            3
+          ],
+          "dtype": "float32"
+        }
+      },
+      "buffers": [
+        {
+          "encoding": "base64",
+          "path": [
+            "array",
+            "buffer"
+          ],
+          "data": "AAAAvwAAAL8AAAC/7PVgvqBQeL3s9WC+7PVgPuz1YD6gUHg9oFB4vez1YL7s9WC+7PVgvuz1YL6gUHi9oFB4Pez1YD7s9WA+AAAAPwAAAD8AAAA/7PVgPqBQeD3s9WA+pKXhvl7Gr76kpeG+AAAAABh9xz0Yfce9UJV4vlCVeL5Q0sK+GH3HPQAAAAAYfce9XsavvqSl4b6kpeG+GH3HvRh9xz0AAAAAUJV4PlDSwj5QlXg+XsavPqSl4T6kpeE+pKXhPqSl4T5exq8+UNLCPlCVeD5QlXg+GH3HPRh9x70AAAAApKXhPl7Grz6kpeE+UJV4vlDSwr5QlXi+AAAAABh9x70Yfcc9pKXhvqSl4b5exq++UNLCvlCVeL5QlXi+GH3HvQAAAAAYfcc9UJV4PlCVeD5Q0sI+"
+        }
+      ]
+    },
+    "0e95813b56a2408a884d333266c3c8a9": {
+      "model_name": "MeshStandardMaterialModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {
+        "alphaMap": null,
+        "aoMap": null,
+        "bumpMap": null,
+        "clippingPlanes": [],
+        "defines": {
+          "STANDARD": ""
+        },
+        "displacementMap": null,
+        "emissiveMap": null,
+        "envMap": null,
+        "flatShading": true,
+        "lightMap": null,
+        "map": null,
+        "metalness": 0.25,
+        "metalnessMap": null,
+        "normalMap": null,
+        "polygonOffset": true,
+        "polygonOffsetFactor": 1.0,
+        "polygonOffsetUnits": 5.0,
+        "roughnessMap": null,
+        "side": "DoubleSide",
+        "vertexColors": "VertexColors"
+      }
+    },
+    "8fb9ace4cd534779946b2376d690adf5": {
+      "model_name": "WebGLShadowMapModel",
+      "model_module": "jupyter-threejs",
+      "model_module_version": "^2.4.1",
+      "state": {}
+    }
+  }
+}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "7902f7d94ce0406f8aabce1b03290aeb"}
+</script>
+
+</body>
+</html>
