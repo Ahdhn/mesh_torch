@@ -10,45 +10,77 @@ from meshplot import plot, subplot, interact
 meshplot.offline()
 
 
-def laplacian_smoothing_energy(vertices, neighbors):
-    energy = 0.0
-    for i, neighbor_indices in enumerate(neighbors):
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = 'cuda'
+print(f"Working on {device} device")
+
+
+def laplacian_smoothing_energy(vertices, adj_matrix):
+    """
+    Compute the Laplacian smoothing energy using the sparse adjacency matrix 
+    For each vertex, compute the average position of its neighbors 
+    """
+    local_energies = torch.zeros(
+        vertices.shape[0], device=vertices.device)
+
+    for v in range(vertices.shape[0]):
+        # get the indices of neighbors from the adjacency matrix (row i)
+        start = adj_matrix.crow_indices()[v].item()
+        end = adj_matrix.crow_indices()[v+1].item()
+        neighbor_indices = adj_matrix.col_indices()[start:end]
         neighbor_positions = vertices[neighbor_indices]
         average_position = neighbor_positions.mean(dim=0)
-        energy += torch.sum((vertices[i] - average_position) ** 2)
-    return energy
+        local_energies[v] = torch.sum((vertices[v] - average_position) ** 2)
+
+    total_energy = local_energies.sum()
+    return total_energy
 
 
-def create_vertex_adj(V, F):
-    vertex_adj = {i: set() for i in range(len(V))}
+def create_adjacency_matrix(V, F):
+    """
+    Create an adjacency matrix in a sparse format
+    """
+    num_vertices = len(V)
+    row_id = []
+    col_id = []
     for face in F:
         for i in range(3):
             for j in range(3):
                 if i != j:
-                    vertex_adj[face[i]].add(face[j])
-    vertex_adj_list = {k: list(v) for k, v in vertex_adj.items()}
-    return vertex_adj_list
+                    row_id.append(face[i])
+                    col_id.append(face[j])
+
+    # Create adjacency matrix indices as tensor
+    indices = torch.tensor([row_id, col_id], dtype=torch.long)
+
+    # Create a sparse adjacency matrix with values of 1 at each (i, j)
+    coo_adj_matrix = torch.sparse_coo_tensor(indices, torch.ones(
+        len(row_id)), (num_vertices, num_vertices), device=device)
+
+    coo_adj_matrix = coo_adj_matrix.coalesce()
+
+    csr_adj_matrix = coo_adj_matrix.to_sparse_csr()
+
+    return csr_adj_matrix
 
 
 root_folder = os.getcwd()
 
-V, F = igl.read_triangle_mesh(os.path.join(root_folder, "sphere1.obj"))
-plot(V, F, filename="mesh.html")
+V, F = igl.read_triangle_mesh(os.path.join(root_folder, "Fennec_Fox.obj"))
+plot(V, F, filename="mesh.html", shading={"wireframe": True})
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-device = 'cpu'
-print(f"Working on {device} device")
 
 vert = torch.tensor(V,  requires_grad=True, device=device)
-vertex_adj = create_vertex_adj(V, F)
-print(vertex_adj)
+adj_matrix = create_adjacency_matrix(V, F)
 
-learning_rate = 0.01
-num_iterations = 100
+# print(adj_matrix)
+
+learning_rate = 0.1
+num_iterations = 10000
 
 for iter in range(num_iterations):
     # loss function
-    energy = laplacian_smoothing_energy(vert, vertex_adj)
+    energy = laplacian_smoothing_energy(vert, adj_matrix)
     # compute gradients
     energy.backward()
 
@@ -60,7 +92,7 @@ for iter in range(num_iterations):
 
     if iter % 10 == 0:
         V = vert.detach().cpu().numpy()
-        plot(V, F, filename="mesh.html")
+        plot(V, F, filename="mesh.html", shading={"wireframe": True})
+        igl.write_triangle_mesh(os.path.join(
+            root_folder + "\out", "iter_" + str(iter) + "_.obj"), V, F)
         print(f"Iteration {iter}: Energy = {energy.item()}")
-
-igl.write_triangle_mesh(os.path.join(root_folder, "out.obj"), V, F)
