@@ -66,7 +66,7 @@ def create_adjacency_matrix(V, F):
 
 root_folder = os.getcwd()
 
-V, F = igl.read_triangle_mesh(os.path.join(root_folder, "Fennec_Fox.obj"))
+V, F = igl.read_triangle_mesh(os.path.join(root_folder, "bunnyhead.obj"))
 plot(V, F, filename="mesh.html", shading={"wireframe": True})
 
 
@@ -75,24 +75,27 @@ adj_matrix = create_adjacency_matrix(V, F)
 
 # print(adj_matrix)
 
-learning_rate = 0.1
-num_iterations = 10000
+learning_rate = 0.005
+num_iterations = 100
 
 for iter in range(num_iterations):
     # loss function
     energy = laplacian_smoothing_energy(vert, adj_matrix)
     # compute gradients
     energy.backward()
+    print(f"energy = {energy}")
 
     with torch.no_grad():
         # take a step
         vert -= learning_rate * vert.grad
         # rest the gradients
         vert.grad.zero_()
-
-    if iter % 10 == 0:
-        V = vert.detach().cpu().numpy()
-        plot(V, F, filename="mesh.html", shading={"wireframe": True})
-        igl.write_triangle_mesh(os.path.join(
-            root_folder + "\out", "iter_" + str(iter) + "_.obj"), V, F)
-        print(f"Iteration {iter}: Energy = {energy.item()}")
+    
+    
+    #if iter % 10 == 0:
+    #    V = vert.detach().cpu().numpy()
+    #    plot(V, F, filename="mesh.html", shading={"wireframe": True})
+    #    igl.write_triangle_mesh(os.path.join(
+    #        root_folder + "\out", "iter_" + str(iter) + "_.obj"), V, F)
+    #    print(f"Iteration {iter}: Energy = {energy.item()}")
+    
