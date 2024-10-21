@@ -3,19 +3,20 @@ import os
 import igl
 import scipy as sp
 import numpy as np
+import sys
+import time
 
 import meshplot
 from meshplot import plot, subplot, interact
 
 meshplot.offline()
 
-root_folder = os.getcwd()
-
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 device = 'cuda'
 print(f"Working on {device} device")
 
 use_dense = False
+benchmark = True
 
 
 def create_sparse_adjacency_matrix(faces, n_vertices):
@@ -73,33 +74,47 @@ def dense_laplacian_smoothing_energy(vertices, adj_matrix):
     return energy
 
 
-V, F = igl.read_triangle_mesh(os.path.join(root_folder, "bunnyhead.obj"))
-plot(V, F, filename="mesh.html", shading={"wireframe": True})
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python smoothing.py <path_to_obj_file>")
+    else:
+        obj_file = sys.argv[1]
+        V, F = igl.read_triangle_mesh(obj_file)
 
-vert = torch.tensor(V, dtype=torch.float32, requires_grad=True, device=device)
-faces = torch.tensor(F, device=device)
+        if not benchmark:
+            plot(V, F, filename="mesh.html", shading={"wireframe": True})
 
-adj_matrix = create_dense_adjacency_matrix(faces, len(
-    V)) if use_dense else create_sparse_adjacency_matrix(faces, len(V))
+        vert = torch.tensor(V, dtype=torch.float32,
+                            requires_grad=True, device=device)
+        faces = torch.tensor(F, device=device)
 
-print(adj_matrix)
+        adj_matrix = create_dense_adjacency_matrix(faces, len(
+            V)) if use_dense else create_sparse_adjacency_matrix(faces, len(V))
 
-learning_rate = 0.005
-num_iterations = 100
+        learning_rate = 0.005
+        num_iterations = 100
 
-for iter in range(num_iterations):
-    energy = dense_laplacian_smoothing_energy(
-        vert, adj_matrix) if use_dense else sparse_laplacian_smoothing_energy(vert, adj_matrix)
-    energy.backward()
-    
-    with torch.no_grad():
-        vert -= learning_rate * vert.grad
-        vert.grad.zero_()
+        start_time = time.time()
 
-    if iter % 10 == 0:
-        V = vert.detach().cpu().numpy()
-        plot(V, F, filename="mesh.html", shading={"wireframe": True})
-        print(f"Iteration {iter}: Energy = {energy.item()}")
+        for iter in range(num_iterations):
+            energy = dense_laplacian_smoothing_energy(
+                vert, adj_matrix) if use_dense else sparse_laplacian_smoothing_energy(vert, adj_matrix)
+            energy.backward()
 
+            with torch.no_grad():
+                vert -= learning_rate * vert.grad
+                vert.grad.zero_()
 
-# igl.write_triangle_mesh(os.path.join(root_folder + "\out", "iter_" + str(iter) + "_.obj"), V, F)
+            if not benchmark:
+                if iter % 10 == 0:
+                    V = vert.detach().cpu().numpy()
+                    plot(V, F, filename="mesh.html",
+                         shading={"wireframe": True})
+                    print(f"Iteration {iter}: Energy = {energy.item()}")
+
+        end_time = time.time()
+        elapsed_time_ms = (end_time - start_time) * 1000
+        print(
+            f"Computation Time: {elapsed_time_ms:.3f} ms, {elapsed_time_ms/num_iterations:.3f} ms per iteration")
+
+        # igl.write_triangle_mesh(os.path.join(os.getcwd() + "\out", "iter_" + str(iter) + "_.obj"), V, F)
