@@ -22,7 +22,7 @@ def laplacian_smoothing_energy(edges, vert):
     v0 = vert[edges[:, 0]]
     v1 = vert[edges[:, 1]]
 
-    edge_lengths = torch.norm(v1 - v0, dim=1)
+    edge_lengths = torch.norm(v1 - v0, dim=1)**2
 
     total_edge_length = torch.sum(edge_lengths)
 
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
         edges = torch.unique(edges, dim=0)
 
-        learning_rate = 0.0005
+        learning_rate = 0.01
         num_iterations = 100
 
         start_time = time.time()
