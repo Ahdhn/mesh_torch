@@ -157,4 +157,5 @@ dependencies:
       - scipy==1.10.1
       - torchaudio==2.4.1
       - torchvision==0.19.1
+      - torchviz==6.4.1
 prefix: C:\Users\engah\miniconda3\envs\mesh_torch

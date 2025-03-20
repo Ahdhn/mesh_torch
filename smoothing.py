@@ -6,18 +6,20 @@ import numpy as np
 import sys
 import time
 
+from torchviz import make_dot
+
 import meshplot
 from meshplot import plot, subplot, interact
 
 meshplot.offline()
+
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 device = 'cuda'
 print(f"Working on {device} device")
 
 use_dense = False
-benchmark = True
-
+benchmark = False
 
 def create_sparse_adjacency_matrix(faces, n_vertices):
     """
@@ -99,6 +101,12 @@ if __name__ == "__main__":
         for iter in range(num_iterations):
             energy = dense_laplacian_smoothing_energy(
                 vert, adj_matrix) if use_dense else sparse_laplacian_smoothing_energy(vert, adj_matrix)
+            
+            if not benchmark:
+                if iter == 0:
+                    dot = make_dot(energy, params={"vert": vert, "adj_matrix": adj_matrix})
+                    dot.save("comp_graph.dot")
+            
             energy.backward()
 
             with torch.no_grad():
