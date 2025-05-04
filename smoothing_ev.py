@@ -5,6 +5,7 @@ import scipy as sp
 import numpy as np
 import sys
 import time
+import json 
 
 import meshplot
 from meshplot import plot, subplot, interact
@@ -13,7 +14,7 @@ meshplot.offline()
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 device = 'cuda'
-print(f"Working on {device} device")
+#print(f"Working on {device} device")
 
 benchmark = True
 
@@ -74,7 +75,16 @@ if __name__ == "__main__":
 
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
-        print(
-            f"Smoothing PyTorch: {elapsed_time_ms:.3f} ms, {elapsed_time_ms/num_iterations:.3f} ms per iteration")
+        
+        output = {
+            "num_faces": int(faces.shape[0]),
+            "total_time_ms": round(elapsed_time_ms, 3),
+            "num_iter": int(num_iterations)}
+
+        print(json.dumps(output, indent=2))
+        
+        # print(f"#Faces = {faces.shape[0]}")
+        # print(
+        #     f"Smoothing PyTorch: {elapsed_time_ms:.3f} ms, {elapsed_time_ms/num_iterations:.3f} ms per iteration")
 
         # igl.write_triangle_mesh(os.path.join(os.getcwd() + "\out", "iter_" + str(iter) + "_.obj"), V, F)
