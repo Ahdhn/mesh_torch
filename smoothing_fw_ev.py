@@ -6,6 +6,9 @@ import numpy as np
 import sys
 import time
 
+import torch.autograd.forward_ad as fwAD
+from torch.func import jacfwd
+
 import meshplot
 from meshplot import plot, subplot, interact
 
@@ -28,9 +31,13 @@ def laplacian_smoothing_energy(edges, vert):
     return energy
 
 
+def energy_fn(vert):    
+    return laplacian_smoothing_energy(edges, vert)
+
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python smoothing_ev.py <path_to_obj_file>")
+        print("Usage: python smoothing_fw_ev.py <path_to_obj_file>")
     else:
         obj_file = sys.argv[1]
         V, F = igl.read_triangle_mesh(obj_file)
@@ -58,23 +65,31 @@ if __name__ == "__main__":
         start_time = time.time()
 
         for iter in range(num_iterations):
-            energy = laplacian_smoothing_energy(edges, vert)
-            energy.backward()
+
+            grad = jacfwd(energy_fn)(vert)
+            
+            # grad = torch.zeros_like(vert)
+            # with fwAD.dual_level():
+            #     for i in range(vert.shape[0]):
+            #         for j in range(vert.shape[1]):
+            #             tangent = torch.zeros_like(vert)
+            #             tangent[i, j] = 1.0
+            #             dual_input = fwAD.make_dual(vert, tangent)
+            #             energy = laplacian_smoothing_energy(edges, dual_input)
+            #             grad[i, j] = fwAD.unpack_dual(energy).tangent
 
             with torch.no_grad():
-                vert -= learning_rate * vert.grad
-                vert.grad.zero_()
+                vert -= learning_rate * grad
 
             if not benchmark:
                 if iter % 10 == 0:
                     V = vert.detach().cpu().numpy()
                     plot(V, F, filename="mesh.html",
                          shading={"wireframe": True})
-                    print(f"Iteration {iter}: Energy = {energy.item()}")
+                    print(
+                        f"Iteration {iter}: Energy = {energy_fn(vert).item()}")
 
         end_time = time.time()
         elapsed_time_ms = (end_time - start_time) * 1000
         print(
             f"Smoothing PyTorch: {elapsed_time_ms:.3f} ms, {elapsed_time_ms/num_iterations:.3f} ms per iteration")
-
-        # igl.write_triangle_mesh(os.path.join(os.getcwd() + "\out", "iter_" + str(iter) + "_.obj"), V, F)
