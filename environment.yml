@@ -1,9 +1,12 @@
 name: mesh_torch
 channels:
   - pytorch
-  - conda-forge
   - nvidia
+  - conda-forge
   - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+  - https://repo.anaconda.com/pkgs/msys2
 dependencies:
   - asttokens=2.0.5=pyhd3eb1b0_0
   - backcall=0.2.0=pyhd3eb1b0_0
@@ -152,10 +155,14 @@ dependencies:
   - zlib=1.2.13=h8cc25b3_1
   - zstd=1.5.6=h8880b57_0
   - pip:
+      - drjit==1.0.3
       - fsspec==2024.9.0
+      - graphviz==0.20.3
+      - indexed-sum==0.1.0
       - libigl==2.5.1
+      - polyscope==2.3.0
       - scipy==1.10.1
       - torchaudio==2.4.1
       - torchvision==0.19.1
-      - torchviz==6.4.1
+      - torchviz==0.0.3
 prefix: C:\Users\engah\miniconda3\envs\mesh_torch
