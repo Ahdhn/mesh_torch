@@ -45,12 +45,13 @@ if __name__ == "__main__":
     num_iterations = 50
 
     start_time = time.time()
+    #with dr.scoped_set_flag(dr.JitFlag.KernelHistory):
 
     for i in range(num_iterations):        
         energy = laplacian_smoothing_energy(edges0, edges1, V)
         dr.backward(energy)
         grad = dr.grad(V)        
-        #print(f"Iteration {2*i}: Energy = {energy}")        
+        print(f"Iteration {2*i}: Energy = {energy}")        
 
         U = V - learning_rate * grad                
         
@@ -59,12 +60,15 @@ if __name__ == "__main__":
         energy = laplacian_smoothing_energy(edges0, edges1, U)
         dr.backward(energy)
         grad = dr.grad(U)
-        #print(f"Iteration {2*i+1}: Energy = {energy}")
+        print(f"Iteration {2*i+1}: Energy = {energy}")
         
         X = U - learning_rate * grad        
         dr.eval()
         
 
+    #hist = dr.kernel_history()
+    #print(hist)
+    
     end_time = time.time()
     elapsed_time_ms = (end_time - start_time) * 1000
 

@@ -61,6 +61,8 @@ if __name__ == "__main__":
         for iter in range(num_iterations):
             energy = laplacian_smoothing_energy(edges, vert)
             energy.backward()
+            
+            print(f"Iteration {iter}: Energy = {energy.item()}")        
 
             with torch.no_grad():
                 vert -= learning_rate * vert.grad
