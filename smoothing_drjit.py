@@ -22,7 +22,7 @@ if __name__ == "__main__":
         print("Usage: python smoothing_drjit.py <path_to_obj_file>")
         sys.exit(1)
 
-    obj_file = sys.argv[1]    
+    obj_file = sys.argv[1]
     V, F = igl.read_triangle_mesh(obj_file)
 
     V = Array3f(np.array(V.T, dtype=np.float32))
@@ -39,36 +39,26 @@ if __name__ == "__main__":
     edges0 = dr.cuda.UInt(edges[:, 0])
     edges1 = dr.cuda.UInt(edges[:, 1])
 
-    dr.enable_grad(V)
-
     learning_rate = 0.01
-    num_iterations = 50
+    num_iterations = 100
 
     start_time = time.time()
-    #with dr.scoped_set_flag(dr.JitFlag.KernelHistory):
+    # with dr.scoped_set_flag(dr.JitFlag.KernelHistory):
 
-    for i in range(num_iterations):        
+    for i in range(num_iterations):
+        dr.enable_grad(V)
         energy = laplacian_smoothing_energy(edges0, edges1, V)
         dr.backward(energy)
-        grad = dr.grad(V)        
-        print(f"Iteration {2*i}: Energy = {energy}")        
+        grad = dr.grad(V)
+        # print(f"Iteration {i}: Energy = {energy}")
 
-        U = V - learning_rate * grad                
-        
-        V = U
-        
-        energy = laplacian_smoothing_energy(edges0, edges1, U)
-        dr.backward(energy)
-        grad = dr.grad(U)
-        print(f"Iteration {2*i+1}: Energy = {energy}")
-        
-        X = U - learning_rate * grad        
-        dr.eval()
-        
+        V = dr.detach(V) - learning_rate * grad
+        V = type(V)(V)
+        dr.eval(V)
 
-    #hist = dr.kernel_history()
-    #print(hist)
-    
+    # hist = dr.kernel_history()
+    # print(hist)
+
     end_time = time.time()
     elapsed_time_ms = (end_time - start_time) * 1000
 
